@@ -52,13 +52,6 @@
                 Tentang Kami
             </a>
         </div>
-
-        <div class="flex gap-3">
-            <a href="{{ route('admin.dashboard') }}"
-                class="px-5 py-2.5 rounded-xl font-semibold hover:bg-slate-200 transition">
-                Admin Panel
-            </a>
-        </div>
     </nav>
 
     <!-- CONTENT -->
