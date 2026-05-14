@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - AmikomEventHub</title>
 
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <script src="https://cdn.tailwindcss.com"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
@@ -77,6 +83,19 @@
                 Kelola Kategori
             </a>
 
+            <!-- Partners -->
+            <a href="{{ route('admin.partners.index') }}"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition
+                {{ request()->routeIs('admin.partners.*') ? 'bg-indigo-800 text-white' : 'hover:bg-indigo-800' }}">
+
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-width="2"
+                        d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                </svg>
+
+                Partners
+            </a>
+
             <!-- Laporan Transaksi -->
             <a href="{{ route('admin.laporan.index') }}"
                 class="flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition
@@ -109,9 +128,14 @@
     </aside>
 
     <!-- Content -->
-    <main class="flex-1 p-10 overflow-y-auto">
-        @yield('content')
+    <main class="flex-1 overflow-y-auto">
+        <div class="container-fluid p-4">
+            @yield('content')
+        </div>
     </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
