@@ -17,7 +17,7 @@
                 Impianmu.
             </h1>
             <p class="text-lg text-slate-500 max-w-lg leading-relaxed">
-                Dari konser musik hingga workshop teknologi, semua ada di genggamanmu.
+                Dari konser musik hingga Seminar teknologi, semua ada di genggamanmu.
                 Pesan aman & cepat dengan Midtrans.
             </p>
             <div class="flex flex-wrap gap-4">
@@ -150,6 +150,48 @@
                     </div>
                 </div>
             @endforeach
+        </div>
+    </section>
+
+    <!-- Partners Section -->
+    <section id="partners" class="max-w-5xl mx-auto px-6 py-20">
+        <div class="flex flex-col gap-8 mb-14">
+            <div>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-3">
+                    Partner/Sponsor Resmi AmikomEventHub
+                </h2>
+                <p class="text-slate-500 text-lg">
+                    AmikomEventHub bekerja sama dengan partner terpercaya untuk mendukung kategori event seperti:
+                </p>
+            </div>
+
+            <div class="flex flex-wrap gap-3">
+                @foreach($categories as $cat)
+                    <span class="px-4 py-2 rounded-full border border-slate-200 text-sm text-slate-700 bg-slate-50">
+                        {{ $cat->name }}
+                    </span>
+                @endforeach
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            @forelse($partners as $partner)
+                <div class="rounded-[2rem] border border-slate-200 p-6 bg-white shadow-md hover:shadow-xl transition">
+                    <div class="flex items-center gap-4 mb-5">
+                        <div class="w-16 h-16 rounded-3xl bg-indigo-50 flex items-center justify-center overflow-hidden">
+                            <img src="{{ $partner->logo_url }}" alt="{{ $partner->name }}" class="max-h-14 object-contain">
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-900">{{ $partner->name }}</h3>
+                            <p class="text-sm text-slate-500">Partner dukungan platform</p>
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <div class="col-span-1 text-center text-slate-500 py-16 rounded-[2rem] border border-dashed border-slate-300 bg-slate-50">
+                    Belum ada partner terdaftar saat ini.
+                </div>
+            @endforelse
         </div>
     </section>
 @endsection

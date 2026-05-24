@@ -9,9 +9,17 @@ use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $events = Event::with('category')->latest()->paginate(10);
+        $search = $request->query('search');
+
+        $events = Event::with('category')
+            ->when($search, function ($query, $search) {
+                return $query->where('title', 'LIKE', "%{$search}%");
+            })
+            ->latest()
+            ->paginate(10);
+
         return view('admin.events.index', compact('events'));
     }
 

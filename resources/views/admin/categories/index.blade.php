@@ -1,170 +1,267 @@
 @extends('layouts.admin')
 
 @section('content')
+<div class="p-6 max-w-6xl mx-auto">
 
-<header class="flex flex-col gap-6 mb-10">
+    <!-- HEADER -->
+    <div class="mb-8">
 
-    <div>
-        <h1 class="text-3xl font-extrabold text-slate-800">Admin</h1>
-        <p class="text-sm text-slate-500">Selamat datang kembali, Admin!</p>
-    </div>
+        <!-- ADMIN -->
+        <div class="mb-6">
+            <h1 class="text-3xl font-extrabold text-slate-800">
+                Admin
+            </h1>
 
-    <div class="flex justify-between items-center">
-        <div>
-            <h1 class="text-3xl font-black text-slate-800">Kelola Kategori</h1>
-            <p class="text-sm text-slate-500">Atur kategori event yang tersedia</p>
+            <p class="text-sm text-slate-500">
+                Selamat datang kembali, Admin!
+            </p>
         </div>
 
-        <button
-            class="px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl font-bold shadow hover:opacity-90 transition">
-            + Tambah Kategori
-        </button>
+        <!-- TITLE + BUTTON -->
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+
+            <div>
+                <h2 class="text-3xl font-black text-slate-800">
+                    Daftar Kategori
+                </h2>
+
+                <p class="text-sm text-slate-500 mt-1">
+                    Kelola seluruh kategori event dengan tampilan modern
+                </p>
+            </div>
+
+            <a href="{{ route('admin.categories.create') }}"
+                class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl
+                bg-gradient-to-r from-indigo-500 to-purple-600
+                text-white font-semibold shadow-lg hover:scale-105
+                transition duration-300">
+
+                + Tambah Kategori
+            </a>
+
+        </div>
+
     </div>
 
-</header>
-<div class="bg-white rounded-2xl border shadow overflow-hidden">
+    <!-- CARD TABLE -->
+    <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
 
-    <!-- Search -->
-    <div class="px-6 py-4 bg-gradient-to-r from-slate-50 to-slate-100 border-b">
-        <input type="text" placeholder="Cari nama kategori..."
-            class="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-indigo-500 outline-none">
-    </div>
+        <!-- TOP BAR -->
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between
+            gap-4 p-6 border-b border-slate-200 bg-slate-50">
 
-    <!-- Table -->
-    <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse">
+            <div>
+                <h3 class="font-bold text-slate-700 text-lg">
+                    Data Kategori Event
+                </h3>
 
-            <!-- HEADER -->
-            <thead class="bg-gradient-to-r from-indigo-50 to-purple-50 text-slate-600 text-xs uppercase font-bold">
-                <tr>
-                    <th class="px-6 py-4 w-16">No</th>
-                    <th class="px-6 py-4">Kategori</th>
-                    <th class="px-6 py-4">Deskripsi</th>
-                    <th class="px-6 py-4 text-center">Jumlah Event</th>
-                    <th class="px-6 py-4 text-right">Aksi</th>
-                </tr>
-            </thead>
+                <p class="text-sm text-slate-500">
+                    Total kategori: {{ $categories->count() }}
+                </p>
+            </div>
 
-            <!-- BODY -->
-            <tbody class="divide-y">
+            <!-- SEARCH -->
+            <form method="GET" action="{{ route('admin.categories.index') }}" class="w-full md:w-72">
+                <div class="relative w-full">
+                    <input type="text" name="search"
+                        value="{{ request('search') }}"
+                        placeholder="Cari kategori..."
+                        class="w-full pl-11 pr-4 py-3 rounded-2xl
+                        border border-slate-300 focus:ring-2
+                        focus:ring-indigo-400 focus:outline-none">
 
-                <!-- ROW 1 -->
-                <tr class="bg-gradient-to-r from-red-50 to-pink-50 hover:from-red-100 hover:to-pink-100 transition">
-                    <td class="px-6 py-5 font-bold text-slate-400">1</td>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="w-5 h-5 absolute left-4 top-3.5 text-slate-400"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor">
 
-                    <td class="px-6 py-5">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                                <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M11.99 5V1h-1v4H7.58L5.6 4.04 4.95 4.6 9 9.07l1.06-1.06 2.86-2.87z"/>
-                                </svg>
+                    <path stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M21 21l-4.35-4.35m1.85-5.15
+                        a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+
+                </div>
+            </form>
+        </div>
+
+        @if(session('success'))
+            <div class="px-6 py-4 bg-green-50 border border-green-200 text-green-700">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <!-- TABLE -->
+        <div class="overflow-x-auto">
+
+            <table class="w-full text-left">
+
+                <!-- HEAD -->
+                <thead class="bg-slate-100 text-slate-700 text-sm uppercase">
+                    <tr>
+                        <th class="px-6 py-4 font-bold">ID</th>
+                        <th class="px-6 py-4 font-bold">Kategori</th>
+                        <th class="px-6 py-4 font-bold">Deskripsi</th>
+                        <th class="px-6 py-4 font-bold">Status</th>
+                        <th class="px-6 py-4 font-bold text-center">Aksi</th>
+                    </tr>
+                </thead>
+
+                <!-- BODY -->
+                <tbody>
+
+                    @forelse($categories as $category)
+
+                    @php
+                        if($category->status == 'aktif') {
+                            $bg = 'from-indigo-50 via-purple-50 to-pink-50';
+                            $hover = 'hover:from-indigo-100 hover:via-purple-100 hover:to-pink-100';
+                        } else {
+                            $bg = 'from-rose-50 via-pink-50 to-red-50';
+                            $hover = 'hover:from-rose-100 hover:via-pink-100 hover:to-red-100';
+                        }
+                    @endphp
+
+                    <tr class="bg-gradient-to-r {{ $bg }}
+                        {{ $hover }}
+                        transition duration-300 border-b border-white">
+
+                        <!-- ID -->
+                        <td class="px-6 py-5 font-bold text-slate-700">
+                            #{{ $category->id }}
+                        </td>
+
+                        <!-- KATEGORI -->
+                        <td class="px-6 py-5">
+
+                            <div class="flex items-center gap-3">
+
+                                <div class="w-11 h-11 rounded-2xl
+                                    bg-gradient-to-r from-indigo-500 to-purple-500
+                                    flex items-center justify-center
+                                    text-white font-bold shadow-md">
+
+                                    {{ strtoupper(substr($category->name, 0, 1)) }}
+                                </div>
+
+                                <div>
+                                    <h4 class="font-bold text-slate-800">
+                                        {{ $category->name }}
+                                    </h4>
+
+                                    <p class="text-sm text-slate-400">
+                                        Event Category
+                                    </p>
+                                </div>
+
                             </div>
-                            <span class="font-bold">Musik</span>
-                        </div>
-                    </td>
 
-                    <td class="px-6 py-5 text-slate-600">
-                        Acara musik live, konser, dan festival
-                    </td>
+                        </td>
 
-                    <td class="px-6 py-5 text-center">
-                        <span class="px-3 py-1 text-xs font-bold rounded-full
-                            bg-gradient-to-r from-indigo-500 to-purple-500 text-white">
-                            8 Event
-                        </span>
-                    </td>
+                        <!-- DESKRIPSI -->
+                        <td class="px-6 py-5 text-slate-600">
+                            {{ $category->description ?? '-' }}
+                        </td>
 
-                    <td class="px-6 py-5">
-                        <div class="flex justify-end gap-2">
-                            <button class="px-3 py-1 text-xs bg-indigo-100 text-indigo-600 rounded-md hover:bg-indigo-600 hover:text-white transition">
-                                Edit
-                            </button>
-                            <button class="px-3 py-1 text-xs bg-red-100 text-red-600 rounded-md hover:bg-red-600 hover:text-white transition">
-                                Hapus
-                            </button>
-                        </div>
-                    </td>
-                </tr>
+                        <!-- STATUS -->
+                        <td class="px-6 py-5">
 
-                <!-- ROW 2 -->
-                <tr class="bg-gradient-to-r from-blue-50 to-cyan-50 hover:from-blue-100 hover:to-cyan-100 transition">
-                    <td class="px-6 py-5 font-bold text-slate-400">2</td>
+                            @if($category->status == 'aktif')
 
-                    <td class="px-6 py-5">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                                <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M20 13H4v6h16v-6z"/>
-                                </svg>
+                                <span class="px-4 py-2 rounded-full text-sm font-semibold
+                                    bg-emerald-100 text-emerald-700">
+
+                                    Aktif
+                                </span>
+
+                            @else
+
+                                <span class="px-4 py-2 rounded-full text-sm font-semibold
+                                    bg-rose-100 text-rose-700">
+
+                                    Nonaktif
+                                </span>
+
+                            @endif
+
+                        </td>
+
+                        <!-- AKSI -->
+                        <td class="px-6 py-5">
+
+                            <div class="flex items-center justify-center gap-3">
+
+                                <!-- EDIT -->
+                                <a href="{{ route('admin.categories.edit', $category->id) }}"
+                                    class="px-4 py-2 rounded-xl
+                                    bg-indigo-100 text-indigo-700
+                                    hover:bg-indigo-600 hover:text-white
+                                    transition font-semibold">
+
+                                    Edit
+                                </a>
+
+                                <!-- DELETE -->
+                                <form action="{{ route('admin.categories.destroy', $category->id) }}"
+                                    method="POST"
+                                    onsubmit="return confirm('Yakin ingin menghapus kategori ini?')">
+
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button type="submit"
+                                        class="px-4 py-2 rounded-xl
+                                        bg-rose-100 text-rose-700
+                                        hover:bg-rose-600 hover:text-white
+                                        transition font-semibold">
+
+                                        Hapus
+                                    </button>
+
+                                </form>
+
                             </div>
-                            <span class="font-bold">Seminar</span>
-                        </div>
-                    </td>
 
-                    <td class="px-6 py-5 text-slate-600">
-                        Acara edukatif dan pembelajaran
-                    </td>
+                        </td>
 
-                    <td class="px-6 py-5 text-center">
-                        <span class="px-3 py-1 text-xs font-bold rounded-full
-                            bg-gradient-to-r from-green-500 to-emerald-500 text-white">
-                            5 Event
-                        </span>
-                    </td>
+                    </tr>
 
-                    <td class="px-6 py-5">
-                        <div class="flex justify-end gap-2">
-                            <button class="px-3 py-1 text-xs bg-indigo-100 text-indigo-600 rounded-md hover:bg-indigo-600 hover:text-white transition">
-                                Edit
-                            </button>
-                            <button class="px-3 py-1 text-xs bg-red-100 text-red-600 rounded-md hover:bg-red-600 hover:text-white transition">
-                                Hapus
-                            </button>
-                        </div>
-                    </td>
-                </tr>
+                    @empty
 
-                <!-- ROW 3 -->
-                <tr class="bg-gradient-to-r from-purple-50 to-fuchsia-50 hover:from-purple-100 hover:to-fuchsia-100 transition">
-                    <td class="px-6 py-5 font-bold text-slate-400">3</td>
+                    <tr>
+                        <td colspan="5" class="px-6 py-12 text-center">
 
-                    <td class="px-6 py-5">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                                <svg class="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                                </svg>
+                            <div class="flex flex-col items-center">
+
+                                <div class="w-20 h-20 rounded-full
+                                    bg-slate-100 flex items-center
+                                    justify-center mb-4 text-3xl">
+
+                                    📂
+                                </div>
+
+                                <h3 class="font-bold text-slate-700 text-lg">
+                                    Belum Ada Kategori
+                                </h3>
+
+                                <p class="text-slate-500 text-sm mt-1">
+                                    Tambahkan kategori baru untuk mulai mengelola event
+                                </p>
+
                             </div>
-                            <span class="font-bold">Workshop</span>
-                        </div>
-                    </td>
 
-                    <td class="px-6 py-5 text-slate-600">
-                        Pelatihan dan workshop interaktif
-                    </td>
+                        </td>
+                    </tr>
 
-                    <td class="px-6 py-5 text-center">
-                        <span class="px-3 py-1 text-xs font-bold rounded-full
-                            bg-gradient-to-r from-orange-500 to-yellow-500 text-white">
-                            3 Event
-                        </span>
-                    </td>
+                    @endforelse
 
-                    <td class="px-6 py-5">
-                        <div class="flex justify-end gap-2">
-                            <button class="px-3 py-1 text-xs bg-indigo-100 text-indigo-600 rounded-md hover:bg-indigo-600 hover:text-white transition">
-                                Edit
-                            </button>
-                            <button class="px-3 py-1 text-xs bg-red-100 text-red-600 rounded-md hover:bg-red-600 hover:text-white transition">
-                                Hapus
-                            </button>
-                        </div>
-                    </td>
-                </tr>
+                </tbody>
 
-            </tbody>
-        </table>
+            </table>
+
+        </div>
     </div>
 </div>
-
 @endsection

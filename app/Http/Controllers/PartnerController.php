@@ -7,9 +7,16 @@ use Illuminate\Http\Request;
 
 class PartnerController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $partners = Partner::all();
+        $search = $request->query('search');
+
+        $partners = Partner::when($search, function ($query, $search) {
+                return $query->where('name', 'LIKE', "%{$search}%");
+            })
+            ->latest()
+            ->get();
+
         return view('admin.partners.index', compact('partners'));
     }
 

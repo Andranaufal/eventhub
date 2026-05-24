@@ -33,16 +33,10 @@
     @endif
 
     <!-- Filter -->
-    <div class="flex gap-4 mb-6">
-        <input type="text" placeholder="Cari event..."
+    <form method="GET" action="{{ route('admin.events.index') }}" class="flex gap-4 mb-6">
+        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari event..."
             class="flex-1 px-4 py-2 rounded-lg border focus:ring-2 focus:ring-indigo-500 outline-none">
-
-        <select class="px-4 py-2 rounded-lg border">
-            <option>Semua</option>
-            <option>Musik</option>
-            <option>Workshop</option>
-        </select>
-    </div>
+    </form>
 
     <!-- HEADER -->
     <div class="grid grid-cols-12 px-4 py-2 mb-3 text-xs font-bold text-slate-500 uppercase">
