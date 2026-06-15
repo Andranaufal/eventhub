@@ -4,13 +4,14 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\LaporanController;
-use App\Http\Controllers\Admin\EventController;
+use App\Http\Controllers\Admin\EventController as AdminEventController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\Admin\AuthController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/event/1', [EventController::class, 'show'])->name('events.show');
+Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
 Route::get('/checkout', [EventController::class, 'checkout'])->name('checkout');
 Route::get('/my-ticket', [EventController::class, 'ticket'])->name('ticket');
 
@@ -32,7 +33,7 @@ Route::middleware('admin')->group(function () {
         return redirect()->route('admin.dashboard');
     });
 
-    Route::resource('events', EventController::class);
+    Route::resource('events', AdminEventController::class);
 
     Route::resource('partners', PartnerController::class);
 

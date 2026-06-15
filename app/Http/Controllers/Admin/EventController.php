@@ -31,23 +31,36 @@ class EventController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'category_id' => 'required',
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'date' => 'required|date',
-            'location' => 'required|string|max:255',
-            'price' => 'required|numeric',
-            'stock' => 'required|numeric',
-            'poster' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
-        ]);
+        $data = $request->validate(
+            [
+                'category_id' => 'required|exists:categories,id',
+                'title' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'date' => 'required|date',
+                'location' => 'required|string|max:255',
+                'price' => 'required|numeric|min:0',
+                'stock' => 'required|numeric|min:1',
+                'poster' => 'nullable|image|max:2048' // Maksimal 2MB
+            ],
+            [
+                'title.required' => 'Judul event wajib diisi',
+                'title.string' => 'Judul event harus berupa teks',
+                'title.max' => 'Judul event tidak boleh lebih dari 255 karakter',
+                'price.required' => 'Harga tiket wajib diisi',
+                'price.numeric' => 'Harga tiket harus berupa angka',
+                'price.min' => 'Harga tiket tidak boleh kurang dari 0',
+                'stock.required' => 'Stok wajib diisi',
+                'stock.numeric' => 'Stok harus berupa angka',
+                'stock.min' => 'Stok tidak boleh kurang dari 1',
+            ]
+        );
 
         // upload poster (kalau ada)
         if ($request->hasFile('poster')) {
-            $data['poster_path'] = $request->file('poster')->store('events', 'public');
+            $data['poster_path'] = $request->file('poster')->store('posters', 'public');
         }
 
-        Event::create($data);
+        \App\Models\Event::create($data);
 
         return redirect()->route('admin.events.index')
             ->with('success', 'Event berhasil ditambahkan!');
@@ -61,20 +74,36 @@ class EventController extends Controller
 
     public function update(Request $request, Event $event)
     {
-        $data = $request->validate([
-            'category_id' => 'required',
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'date' => 'required|date',
-            'location' => 'required|string|max:255',
-            'price' => 'required|numeric',
-            'stock' => 'required|numeric',
-            'poster' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
-        ]);
+        $data = $request->validate(
+            [
+                'category_id' => 'required|exists:categories,id',
+                'title' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'date' => 'required|date',
+                'location' => 'required|string|max:255',
+                'price' => 'required|numeric|min:0',
+                'stock' => 'required|numeric|min:1',
+                'poster' => 'nullable|image|max:2048'
+            ],
+            [
+                'title.required' => 'Judul event wajib diisi',
+                'title.string' => 'Judul event harus berupa teks',
+                'title.max' => 'Judul event tidak boleh lebih dari 255 karakter',
+                'price.required' => 'Harga tiket wajib diisi',
+                'price.numeric' => 'Harga tiket harus berupa angka',
+                'price.min' => 'Harga tiket tidak boleh kurang dari 0',
+                'stock.required' => 'Stok wajib diisi',
+                'stock.numeric' => 'Stok harus berupa angka',
+                'stock.min' => 'Stok tidak boleh kurang dari 1',
+            ]
+        );
 
         // update poster (kalau ada)
         if ($request->hasFile('poster')) {
-            $data['poster_path'] = $request->file('poster')->store('events', 'public');
+            if ($event->poster_path) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($event->poster_path);
+            }
+            $data['poster_path'] = $request->file('poster')->store('posters', 'public');
         }
 
         $event->update($data);

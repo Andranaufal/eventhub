@@ -109,7 +109,9 @@
                     <!-- Image -->
                     <div class="relative overflow-hidden h-[360px]">
                         <img
-                            src="https://placehold.co/600x800"
+                            src="{{ ($event->poster_path && Storage::disk('public')->exists($event->poster_path))
+                                ? asset('storage/' . $event->poster_path)
+                                : 'https://placehold.co/200x600' }}"
                             alt="{{ $event->title }}"
                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                         <!-- Overlay -->
@@ -143,7 +145,7 @@
                                 Rp {{ number_format($event->price, 0, ',', '.') }}
                             </h4>
                         </div>
-                        <a href="{{ url('event/1') }}"
+                        <a href="{{ route('events.show', $event->id) }}"
                             class="px-5 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold transition-all duration-300 shadow-lg shadow-indigo-200">
                             Lihat Detail
                         </a>
