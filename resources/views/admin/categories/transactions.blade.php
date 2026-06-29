@@ -64,106 +64,63 @@
                 <!-- Body -->
                 <tbody class="divide-y">
 
-                    <!-- ROW -->
-                    <tr class="hover:bg-indigo-50 transition">
-                        <td class="px-6 py-5">
-                            <span class="font-mono text-sm font-bold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-lg">
-                                #TRX-99210
-                            </span>
-                        </td>
+                    @forelse($transactions as $transaction)
+                        <tr class="hover:bg-indigo-50 transition">
+                            <td class="px-6 py-5">
+                                <span class="font-mono text-sm font-bold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-lg">
+                                    {{ $transaction->order_id }}
+                                </span>
+                            </td>
 
-                        <td class="px-6 py-5">
-                            <p class="font-semibold text-slate-800">Donni Prabowo</p>
-                            <p class="text-xs text-slate-400">donni@example.com</p>
-                        </td>
+                            <td class="px-6 py-5">
+                                <p class="font-semibold text-slate-800">{{ $transaction->customer_name }}</p>
+                                <p class="text-xs text-slate-400">{{ $transaction->customer_email }}</p>
+                            </td>
 
-                        <td class="px-6 py-5 font-medium text-slate-700">
-                            Jazz Night 2024
-                        </td>
+                            <td class="px-6 py-5 font-medium text-slate-700">
+                                {{ $transaction->event->title ?? '-' }}
+                            </td>
 
-                        <td class="px-6 py-5 text-sm text-slate-500">
-                            26 Mar 2024
-                        </td>
+                            <td class="px-6 py-5 text-sm text-slate-500">
+                                {{ $transaction->created_at->format('d M Y, H:i') }}
+                            </td>
 
-                        <td class="px-6 py-5">
-                            <span class="px-3 py-1 text-xs font-bold rounded-full bg-green-100 text-green-600 ring-1 ring-green-200">
-                                Success
-                            </span>
-                        </td>
+                            <td class="px-6 py-5">
+                                @if(in_array($transaction->status, ['settlement', 'success']))
+                                    <span class="px-3 py-1 text-xs font-bold rounded-full bg-green-100 text-green-600 ring-1 ring-green-200">
+                                        Success
+                                    </span>
+                                @elseif($transaction->status === 'pending')
+                                    <span class="px-3 py-1 text-xs font-bold rounded-full bg-yellow-100 text-yellow-600 ring-1 ring-yellow-200">
+                                        Pending
+                                    </span>
+                                @else
+                                    <span class="px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">
+                                        {{ $transaction->status }}
+                                    </span>
+                                @endif
+                            </td>
 
-                        <td class="px-6 py-5 text-right font-bold text-indigo-600">
-                            Rp 155.000
-                        </td>
-                    </tr>
-
-                    <!-- ROW -->
-                    <tr class="hover:bg-indigo-50 transition">
-                        <td class="px-6 py-5">
-                            <span class="font-mono text-sm bg-slate-100 px-3 py-1 rounded-lg">
-                                #TRX-99209
-                            </span>
-                        </td>
-
-                        <td class="px-6 py-5">
-                            <p class="font-semibold">Maya Sari</p>
-                            <p class="text-xs text-slate-400">maya@example.com</p>
-                        </td>
-
-                        <td class="px-6 py-5 font-medium">
-                            AI Workshop
-                        </td>
-
-                        <td class="px-6 py-5 text-sm text-slate-500">
-                            26 Mar 2024
-                        </td>
-
-                        <td class="px-6 py-5">
-                            <span class="px-3 py-1 text-xs font-bold rounded-full bg-yellow-100 text-yellow-600 ring-1 ring-yellow-200">
-                                Pending
-                            </span>
-                        </td>
-
-                        <td class="px-6 py-5 text-right font-bold">
-                            Rp 55.000
-                        </td>
-                    </tr>
-
-                    <!-- ROW -->
-                    <tr class="hover:bg-indigo-50 transition">
-                        <td class="px-6 py-5">
-                            <span class="font-mono text-sm bg-slate-100 px-3 py-1 rounded-lg">
-                                #TRX-99208
-                            </span>
-                        </td>
-
-                        <td class="px-6 py-5">
-                            <p class="font-semibold">Budi Santoso</p>
-                            <p class="text-xs text-slate-400">budi@example.com</p>
-                        </td>
-
-                        <td class="px-6 py-5 font-medium">
-                            Hackathon 2024
-                        </td>
-
-                        <td class="px-6 py-5 text-sm text-slate-500">
-                            25 Mar 2024
-                        </td>
-
-                        <td class="px-6 py-5">
-                            <span class="px-3 py-1 text-xs font-bold rounded-full bg-slate-100 text-slate-600 ring-1 ring-slate-200">
-                                Free
-                            </span>
-                        </td>
-
-                        <td class="px-6 py-5 text-right font-bold">
-                            Rp 0
-                        </td>
-                    </tr>
+                            <td class="px-6 py-5 text-right font-bold text-indigo-600">
+                                Rp {{ number_format($transaction->total_price, 0, ',', '.') }}
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6" class="px-6 py-10 text-center text-slate-500">
+                                Belum ada transaksi
+                            </td>
+                        </tr>
+                    @endforelse
 
                 </tbody>
             </table>
         </div>
 
+    </div>
+
+    <div class="px-6 py-4 border-t">
+        {{ $transactions->links() }}
     </div>
 
 </div>
