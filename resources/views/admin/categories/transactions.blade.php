@@ -14,11 +14,6 @@
             <h1 class="text-3xl font-black text-slate-800">Laporan Transaksi</h1>
             <p class="text-sm text-slate-500">Pantau arus kas dan penjualan tiket Anda</p>
         </div>
-
-        <button
-            class="px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl font-bold shadow hover:opacity-90 transition">
-            + Tambah Kategori
-        </button>
     </div>
 
 </header>
