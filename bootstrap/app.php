@@ -17,6 +17,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectGuestsTo('/login');
         // Define a middleware group named 'admin' that applies both auth and admin checks
         $middleware->group('admin', ['auth', 'is_admin']);
+        // Mengecualikan route webhook Midtrans dari blokir CSRF
+        $middleware->validateCsrfTokens(except: [
+            '/midtrans/callback',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
